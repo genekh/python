@@ -1,0 +1,64 @@
+language: python
+
+python:
+ - "2.7"
+ - "3.4"
+ - "3.5"
+ - "3.6"
+ - "nightly"
+ - "pypy"
+ - "pypy3"
+
+matrix:
+  allow_failures:
+    # those "upcoming" python versions are informational
+    - python: nightly
+    - python: "pypy"
+    - python: "pypy3"
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      # gfortran is needed to build the examples
+      - gfortran
+
+env:
+  matrix:
+    - USE_PIP=ON
+    - USE_PIP=OFF
+
+script:
+  # install latest release from pip ###########################################
+  # .. or install from source
+  #
+  # note: since this is executed in a virtualenv
+  #       we can not add "--user"
+  - if [ "$USE_PIP" == "ON" ]; then
+      pip install Forthon;
+    else
+      python setup.py install;
+    fi
+  # Python3 ###################################################################
+  #
+  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]] ||
+       [[ $TRAVIS_PYTHON_VERSION == nightly ]] ||
+       [[ $TRAVIS_PYTHON_VERSION == pypy3 ]]; then
+      echo "Python 3 - overwriting Forthon executable with Forthon3";
+      export FORTHON_CMD=Forthon3;
+    else
+      export FORTHON_CMD=Forthon;
+    fi
+  - which $FORTHON_CMD
+  # now build some examples ###################################################
+  #
+  - cd example
+  - make FORTHON=$FORTHON_CMD
+  # broken legacy example:
+  # - cd ../example2
+  # - make FORTHON=$FORTHON_CMD
+  - cd ../simpleexample
+  - make FORTHON=$FORTHON_CMD
+  - python run_forthon_example.py
+  - cd ..
