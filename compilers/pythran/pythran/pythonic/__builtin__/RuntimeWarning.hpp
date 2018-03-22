@@ -1,0 +1,17 @@
+#ifndef PYTHONIC_BUILTIN_RUNTIMEWARNING_HPP
+#define PYTHONIC_BUILTIN_RUNTIMEWARNING_HPP
+
+#include "pythonic/include/__builtin__/RuntimeWarning.hpp"
+
+#include "pythonic/types/exceptions.hpp"
+
+PYTHONIC_NS_BEGIN
+
+namespace __builtin__
+{
+
+  PYTHONIC_EXCEPTION_IMPL(RuntimeWarning)
+}
+PYTHONIC_NS_END
+
+#endif

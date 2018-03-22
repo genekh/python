@@ -1,0 +1,9 @@
+*.so
+*.pyc
+build
+dist
+website/*.html
+website/license.txt
+pythran/nt2
+pythran/boost
+parsetab.py
